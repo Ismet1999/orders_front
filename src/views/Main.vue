@@ -51,7 +51,7 @@
 
     <b-modal
       id="modal-1"
-      title="BootstrapVue"
+      :title="formData.id ? 'Редактирование' : 'Добавление'"
       ok-title="Сохранить"
       cancel-title="Отмена"
       @ok="submitHandle"
