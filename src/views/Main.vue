@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="d-flex justify-content-end mb-2">
-      <b-button v-b-modal.modal-1 variant="primary"> Добавить </b-button>
+      <b-button v-b-modal.modal-1 variant="primary" @click="clearData">
+        Добавить
+      </b-button>
     </div>
     <b-card>
       <div class="d-flex justify-contet-between">
@@ -355,6 +357,23 @@ export default {
           },
         });
       });
+    },
+
+    clearData() {
+      this.formData = {
+        type: "",
+        kw: "",
+        task: "",
+        clientName: "",
+        phone: "",
+        price: "",
+        prepayment: "",
+        phone: "",
+        inputDate: "",
+        outputDate: "",
+        status: {},
+        photo: "",
+      };
     },
 
     //  get source from file
