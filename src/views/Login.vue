@@ -226,9 +226,10 @@ export default {
               password: this.password,
             })
             .then((r) => {
-              let { accessToken, refreshToken } = r.data;
+              let { accessToken, refreshToken, user } = r.data;
               useJwt.setToken(accessToken);
               useJwt.setRefreshToken(refreshToken);
+              localStorage.setItem("userData", JSON.stringify(user));
 
               this.$toast({
                 component: ToastificationContent,

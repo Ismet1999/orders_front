@@ -24,8 +24,8 @@
       >
         <template #button-content>
           <div class="d-sm-flex d-none user-nav">
-            <p class="user-name font-weight-bolder mb-0">John Doe</p>
-            <span class="user-status">Admin</span>
+            <p class="user-name font-weight-bolder mb-0">{{ user.name }}</p>
+            <span class="user-status">{{ user.role }}</span>
           </div>
           <b-avatar
             size="40"
@@ -80,6 +80,7 @@ import {
 import useJwt from "@/auth/jwt/useJwt";
 
 import DarkToggler from "@core/layouts/components/app-navbar/components/DarkToggler.vue";
+import { getUserData } from "@/auth/utils";
 
 export default {
   components: {
@@ -99,6 +100,11 @@ export default {
       default: () => {},
     },
   },
+  data() {
+    return {
+      user: getUserData(),
+    };
+  },
 
   methods: {
     logout() {
@@ -113,7 +119,7 @@ export default {
       // Reset ability
 
       // Redirect to login page
-      this.$router.push('/login');
+      this.$router.push("/login");
     },
   },
 };
