@@ -21,14 +21,20 @@
       <div style="overflow-x: auto">
         <b-table striped hover :items="ORDERS" :fields="fields">
           <template #cell(status)="data">
-            <b-badge :variant="data.item.status.color">
+            <b-badge v-if="data.item.status" :variant="data.item.status.color">
               {{ data.item.status.title }}
             </b-badge>
+            <b-badge v-else> Не указан </b-badge>
           </template>
           <template #cell(photo)="data">
-            <a :href="fixImage(data.item.photo)" target="_blank">
+            <a
+              v-if="data.item.photo"
+              :href="fixImage(data.item.photo)"
+              target="_blank"
+            >
               <b-img :src="fixImage(data.item.photo)" fluid></b-img>
             </a>
+            <p v-else>Фото не загружено</p>
           </template>
           <template #cell(actions)="data">
             <b-button
@@ -251,31 +257,12 @@ export default {
           label: "Действия",
         },
       ],
-      items: [
-        {
-          type: "type",
-          kw: "kw",
-          task: "task",
-          name: "name",
-          phone: "phone",
-          price: "price",
-          prepayment: "prepayment",
-          phone: "phone",
-          input: "input",
-          output: "output",
-          status: "status",
-          photo: "photo",
-          actions: "actions",
-        },
-      ],
     };
   },
-
   computed: {
     ...mapState("orders", ["ORDERS"]),
     ...mapState("statuses", ["STATUSES"]),
   },
-
   mounted() {
     this.fetchAllOrders();
     this.FETCH_ALL_STATUSES();
@@ -381,7 +368,6 @@ export default {
       let reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        console.log("reader.result", reader.result);
         this.modalPhoto = reader.result;
       };
     },
@@ -402,9 +388,6 @@ export default {
   },
 };
 </script>
-
-
-
 <style lang="scss">
 @import "@core/scss/vue/libs/vue-select.scss";
 @import "@core/scss/vue/libs/vue-flatpicker.scss";
