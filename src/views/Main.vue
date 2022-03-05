@@ -90,11 +90,15 @@
           </div>
           <div>
             <label for="">Цена</label>
-            <b-form-input v-model="formData.price"></b-form-input>
+            <b-form-input type="number" v-model="formData.price">
+            </b-form-input>
           </div>
           <div class="mb-1">
             <label for="">Заклад</label>
-            <b-form-input v-model="formData.prepayment"></b-form-input>
+            <b-form-input
+              type="number"
+              v-model="formData.prepayment"
+            ></b-form-input>
           </div>
 
           <div class="mb-1" v-if="formData.status.id">
@@ -347,6 +351,7 @@ export default {
     },
 
     clearData() {
+      this.modalPhoto = null;
       this.formData = {
         type: "",
         kw: "",
