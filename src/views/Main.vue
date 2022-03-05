@@ -18,8 +18,8 @@
           </b-col>
         </b-row>
       </div>
-      <div style="overflow-x: auto">
-        <b-table striped hover :items="ORDERS" :fields="fields">
+      <div>
+        <b-table striped hover :items="ORDERS" :fields="fields" responsive>
           <template #cell(status)="data">
             <b-badge v-if="data.item.status" :variant="data.item.status.color">
               {{ data.item.status.title }}
