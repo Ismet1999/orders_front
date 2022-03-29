@@ -305,7 +305,7 @@ export default {
         prepayment: parseInt(prepayment),
         statusId: status.id || 1,
       };
-      if (typeof photo !== "string") {
+      if (typeof photo !== "string" && photo !== null) {
         item.photo = photo;
       }
       if (id) {
