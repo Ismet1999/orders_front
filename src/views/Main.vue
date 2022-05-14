@@ -1,9 +1,7 @@
 <template>
   <div>
     <div class="d-flex justify-content-end mb-2">
-      <b-button v-b-modal.modal-1 variant="primary" @click="clearData">
-        Добавить
-      </b-button>
+      <b-button variant="primary" @click="clearData"> Добавить </b-button>
     </div>
     <b-card>
       <div class="d-flex justify-contet-between">
@@ -28,7 +26,7 @@
           </template>
           <template #cell(photo)="data">
             <a
-              v-if="data.item.photo"
+              v-if="data.item.photo && data.item.photo !== 'null'"
               :href="fixImage(data.item.photo)"
               target="_blank"
             >
@@ -60,84 +58,164 @@
       :title="formData.id ? 'Редактирование' : 'Добавление'"
       ok-title="Сохранить"
       cancel-title="Отмена"
-      @ok="submitHandle"
+      v-model="modalState"
+      @ok.prevent="submitHandle"
     >
-      <b-row>
-        <b-col>
-          <div>
-            <label for="">Тип</label>
-            <b-form-input v-model="formData.type"></b-form-input>
-          </div>
-          <div>
-            <label for="">KW</label>
-            <b-form-input v-model="formData.kw"></b-form-input>
-          </div>
-          <div>
-            <label for="">Задача</label>
-            <b-form-input v-model="formData.task"></b-form-input>
-          </div>
-          <div>
-            <label for="">Имя</label>
-            <b-form-input v-model="formData.clientName"></b-form-input>
-          </div>
-          <div>
-            <label for="">Телефон</label>
-            <b-form-input
-              v-model="formData.phone"
-              :formatter="(v) => v.replace(/[^0-9+]/gm, '')"
-              type="tel"
-            ></b-form-input>
-          </div>
-          <div>
-            <label for="">Цена</label>
-            <b-form-input type="number" v-model="formData.price">
-            </b-form-input>
-          </div>
-          <div class="mb-1">
-            <label for="">Заклад</label>
-            <b-form-input
-              type="number"
-              v-model="formData.prepayment"
-            ></b-form-input>
-          </div>
+      <validation-observer ref="validateForm">
+        <b-row>
+          <b-col>
+            <div>
+              <label for="">Тип</label>
+              <validation-provider
+                #default="{ errors }"
+                name="Тип"
+                rules="required"
+              >
+                <b-form-input v-model="formData.type" type="text" />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </div>
+            <div>
+              <label for="">KW</label>
+              <validation-provider
+                #default="{ errors }"
+                name="KW"
+                rules="required"
+              >
+                <b-form-input v-model="formData.kw"></b-form-input>
 
-          <div class="mb-1" v-if="formData.status.id">
-            <label for="">Статус</label>
-            <v-select
-              v-model="formData.status"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :clearable="false"
-              label="title"
-              :options="STATUSES"
-            />
-          </div>
-          <div class="mb-1">
-            <label for="">Приём</label>
-            <flat-pickr
-              v-model="formData.inputDate"
-              :config="configDate"
-            ></flat-pickr>
-          </div>
-          <div class="mb-1">
-            <label for="">Цель</label>
-            <flat-pickr
-              v-model="formData.outputDate"
-              :config="configDate"
-            ></flat-pickr>
-          </div>
-          <div>
-            <label for="">Фото</label>
-            <b-img :src="modalPhoto" fluid></b-img>
-            <b-form-file
-              v-model="formData.photo"
-              accept="image/*"
-              plain
-              @input="getSrcFromFile"
-            >
-            </b-form-file>
-          </div>
-        </b-col>
-      </b-row>
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </div>
+            <div>
+              <label for="">Задача</label>
+              <validation-provider
+                #default="{ errors }"
+                name="Задача"
+                rules="required"
+              >
+                <b-form-input v-model="formData.task"></b-form-input>
+
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </div>
+            <div>
+              <label for="">Имя</label>
+              <validation-provider
+                #default="{ errors }"
+                name="Имя"
+                rules="required"
+              >
+                <b-form-input v-model="formData.clientName"></b-form-input>
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </div>
+            <div>
+              <label for="">Телефон</label>
+              <validation-provider
+                #default="{ errors }"
+                name="Телефон"
+                rules="required"
+              >
+                <b-form-input
+                  v-model="formData.phone"
+                  :formatter="(v) => v.replace(/[^0-9+]/gm, '')"
+                  type="tel"
+                ></b-form-input>
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </div>
+            <div>
+              <label for="">Цена</label>
+              <validation-provider
+                #default="{ errors }"
+                name="Цена"
+                rules="required"
+              >
+                <b-form-input type="number" v-model="formData.price">
+                </b-form-input>
+
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </div>
+            <div class="mb-1">
+              <label for="">Заклад</label>
+              <validation-provider
+                #default="{ errors }"
+                name="Заклад"
+                rules="required"
+              >
+                <b-form-input
+                  type="number"
+                  v-model="formData.prepayment"
+                ></b-form-input>
+
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </div>
+
+            <div class="mb-1" v-if="formData.status.id">
+              <label for="">Статус</label>
+              <validation-provider
+                #default="{ errors }"
+                name="Статус"
+                rules="required"
+              >
+                <v-select
+                  v-model="formData.status"
+                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                  :clearable="false"
+                  label="title"
+                  :options="STATUSES"
+                />
+
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </div>
+            <div class="mb-1">
+              <label for="">Приём</label>
+              <validation-provider
+                #default="{ errors }"
+                name="Приём"
+                rules="required"
+              >
+                <flat-pickr
+                  v-model="formData.inputDate"
+                  :config="configDate"
+                  class="form-control"
+                ></flat-pickr>
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </div>
+            <div class="mb-1">
+              <label for="">Цель</label>
+              <validation-provider
+                #default="{ errors }"
+                name="Цель"
+                rules="required"
+              >
+                <flat-pickr
+                  v-model="formData.outputDate"
+                  :config="configDate"
+                  class="form-control"
+                ></flat-pickr>
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </div>
+            <div>
+              <label for="">Фото</label>
+              <b-img :src="modalPhoto" fluid></b-img>
+              <b-form-file
+                v-model="formData.photo"
+                accept="image/*"
+                plain
+                @input="getSrcFromFile"
+              >
+              </b-form-file>
+            </div>
+          </b-col>
+        </b-row>
+      </validation-observer>
     </b-modal>
   </div>
 </template>
@@ -155,6 +233,8 @@ import {
   BFormFile,
   BImg,
 } from "bootstrap-vue";
+
+import { required, email } from "@validations";
 
 import vSelect from "vue-select";
 import flatPickr from "vue-flatpickr-component";
@@ -182,6 +262,7 @@ export default {
   },
   data() {
     return {
+      modalState: false,
       filterData: {
         search: "",
       },
@@ -192,7 +273,7 @@ export default {
         clientName: "",
         phone: "",
         price: "",
-        prepayment: "",
+        prepayment: 0,
         phone: "",
         inputDate: "",
         outputDate: "",
@@ -278,6 +359,9 @@ export default {
       return axiosconf.baseURL + url;
     },
     async submitHandle() {
+      let validate = await this.$refs.validateForm.validate();
+      if (!validate) return;
+
       let {
         id,
         type,
@@ -322,6 +406,7 @@ export default {
             },
           });
           this.fetchAllOrders();
+          this.modalState = false;
         })
         .catch((r) => {
           this.$toast({
@@ -331,6 +416,7 @@ export default {
               variant: "warning",
             },
           });
+          this.modalState = false;
         });
     },
 
@@ -359,13 +445,14 @@ export default {
         clientName: "",
         phone: "",
         price: "",
-        prepayment: "",
+        prepayment: 0,
         phone: "",
         inputDate: "",
         outputDate: "",
         status: {},
         photo: "",
       };
+      this.modalState = true;
     },
 
     //  get source from file
