@@ -1,3 +1,4 @@
 module.exports = {
-  baseURL: 'http://46.36.217.179:81/',
-}
+  // baseURL: 'http://46.36.217.179:81/',
+  baseURL: "",
+};

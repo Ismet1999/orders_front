@@ -30,7 +30,11 @@
               :href="fixImage(data.item.photo)"
               target="_blank"
             >
-              <b-img :src="fixImage(data.item.photo)" fluid></b-img>
+              <b-img
+                style="height: 100px; width: auto"
+                :src="fixImage(data.item.photo)"
+                fluid
+              ></b-img>
             </a>
             <p v-else>Фото не загружено</p>
           </template>
